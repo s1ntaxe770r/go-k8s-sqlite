@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sqlite3-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: sqlite3-container
+          image: nouchka/sqlite3
+          command: ["/bin/sh", "-c"]
+          args: ["sleep 10000000"]
+          volumeMounts:
+            - mountPath: /mnt/data/level_order.db
+              name: level-order-storage
+      restartPolicy: Never
+      volumes:
+        - name: level-order-storage
+          persistentVolumeClaim:
+            claimName: level-order-pvc
+  backoffLimit: 4
